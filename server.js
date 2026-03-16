@@ -3,7 +3,7 @@ const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
 
 const app = express();
-const PORT = 3000;
+//const PORT = 3000;
 
 // Middleware
 app.use(express.static("public"));
@@ -221,6 +221,6 @@ app.get("/logout", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
