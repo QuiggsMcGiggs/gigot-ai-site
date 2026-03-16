@@ -219,4 +219,10 @@ app.get("/logout", (req, res) => {
 //    console.log(`Gigot AI Solutions running at http://localhost:${PORT}`);
 //});
 
+if (process.env.VERCEL !== "1") {
+  app.listen(3000, () => {
+    console.log("Gigot AI Solutions running at http://localhost:3000");
+  });
+}
+
 module.exports = app;
