@@ -1,5 +1,5 @@
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
+const Database = require("better-sqlite3");
 const session = require("express-session");
 
 const app = express();
@@ -16,16 +16,11 @@ app.use(session({
 }));
 
 // Database
-const db = new sqlite3.Database("leads.db", (err) => {
-    if (err) {
-        console.error("Database connection error:", err);
-    } else {
-        console.log("Connected to leads database");
-    }
-});
+const db = new Database("leads.db");
+console.log("Connected to leads database");
 
 // Create table
-db.run(`
+db.prepare(`
 CREATE TABLE IF NOT EXISTS leads (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT,
@@ -33,30 +28,30 @@ email TEXT,
 message TEXT,
 date DATETIME DEFAULT CURRENT_TIMESTAMP
 )
-`);
+`).run();
 
 // CONTACT FORM
 app.post("/contact", (req, res) => {
 
     const { name, email, message } = req.body;
 
-    db.run(
-        "INSERT INTO leads (name,email,message) VALUES (?,?,?)",
-        [name, email, message],
-        function (err) {
+    try {
 
-            if (err) {
-                console.log(err);
-                return res.send("Database error");
-            }
+        db.prepare(
+            "INSERT INTO leads (name,email,message) VALUES (?,?,?)"
+        ).run(name, email, message);
 
-            res.send(`
-                <h2>Thank you ${name}!</h2>
-                <p>Your message has been saved.</p>
-                <a href="/">Return Home</a>
-            `);
-        }
-    );
+        res.send(`
+            <h2>Thank you ${name}!</h2>
+            <p>Your message has been saved.</p>
+            <a href="/">Return Home</a>
+        `);
+
+    } catch (err) {
+        console.log(err);
+        res.send("Database error");
+    }
+
 });
 
 // LOGIN PAGE
@@ -110,11 +105,11 @@ function requireLogin(req, res, next) {
 // LEADS DASHBOARD
 app.get("/leads", requireLogin, (req, res) => {
 
-    db.all("SELECT * FROM leads ORDER BY date DESC", [], (err, rows) => {
+    try {
 
-        if (err) {
-            return res.send("Database error");
-        }
+        const rows = db.prepare(
+            "SELECT * FROM leads ORDER BY date DESC"
+        ).all();
 
         const tableRows = rows.map(lead => `
         <tr>
@@ -201,7 +196,10 @@ app.get("/leads", requireLogin, (req, res) => {
         </html>
         `);
 
-    });
+    } catch (err) {
+        console.log(err);
+        res.send("Database error");
+    }
 
 });
 
