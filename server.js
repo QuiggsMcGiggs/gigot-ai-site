@@ -215,6 +215,8 @@ app.get("/logout", (req, res) => {
 });
 
 // START SERVER
-app.listen(PORT, () => {
-    console.log(`Gigot AI Solutions running at http://localhost:${PORT}`);
-});
+//app.listen(PORT, () => {
+//    console.log(`Gigot AI Solutions running at http://localhost:${PORT}`);
+//});
+
+module.exports = app;
