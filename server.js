@@ -1,6 +1,7 @@
 const express = require("express");
 const Database = require("better-sqlite3");
 const session = require("express-session");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 //const PORT = 3000;
@@ -14,6 +15,12 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+const contactLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 5, // max 5 submissions per IP
+    message: "Too many messages sent. Please try again later."
+});
 
 // Database
 const db = new Database("leads.db");
@@ -31,9 +38,23 @@ date DATETIME DEFAULT CURRENT_TIMESTAMP
 `).run();
 
 // CONTACT FORM
-app.post("/contact", (req, res) => {
+app.post("/contact", contactLimiter, (req, res) => {
 
-    const { name, email, message } = req.body;
+    const { name, email, message, company } = req.body;
+
+    // Honeypot trap
+    if (company) {
+        return res.sendStatus(400);
+    }
+
+    // Input validation
+    if (!name || !email || !message) {
+        return res.send("All fields are required.");
+    }
+
+    if (message.length > 1000) {
+        return res.send("Message too long.");
+    }
 
     try {
 
