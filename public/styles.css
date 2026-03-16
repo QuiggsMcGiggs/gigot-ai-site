@@ -178,6 +178,7 @@ padding:8px 16px;
 border-radius:6px;
 font-weight:bold;
 opacity:1 !important;
+white-space: nowrap;
 }
 
 .cta:hover{
@@ -188,4 +189,17 @@ box-shadow:0 0 12px rgba(56,189,248,.7);
 
 .contact-form button:hover{
 box-shadow:0 0 20px rgba(99,102,241,.7);
+}
+
+@media (max-width: 600px){
+
+header{
+padding:15px 20px;
+}
+
+nav a{
+margin-left:12px;
+font-size:14px;
+}
+
 }
