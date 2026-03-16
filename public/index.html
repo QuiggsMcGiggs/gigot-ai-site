@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gigot AI Solutions</title>
+
+<link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+<canvas id="network"></canvas>
+
+<header>
+
+<div class="logo">Gigot AI Solutions</div>
+
+<nav>
+<a href="/">Home</a>
+<a href="#contact" class="cta">Start a Project</a>
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h1>Custom AI Design Solutions</h1>
+
+<h2 id="typing"></h2>
+
+<p>
+Gigot AI Solutions builds intelligent software, automation tools,
+and advanced analytics platforms tailored to modern businesses.
+</p>
+
+<button onclick="alert('Contact: brandon.gigot@outlook.com')">
+Start Your AI Project
+</button>
+
+</section>
+
+<section class="section">
+
+<h2>AI Services</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>AI Application Development</h3>
+<p>Custom AI-powered platforms designed to solve complex business problems.</p>
+</div>
+
+<div class="card">
+<h3>Business Automation</h3>
+<p>Automate workflows and operational processes using intelligent systems.</p>
+</div>
+
+<div class="card">
+<h3>AI Data Analytics</h3>
+<p>Predictive insights, dashboards, and machine learning analysis tools.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Solutions</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>AI Chatbots</h3>
+<p>Conversational AI assistants for customer support and engagement.</p>
+</div>
+
+<div class="card">
+<h3>Enterprise AI Tools</h3>
+<p>Internal AI platforms that enhance productivity and decision making.</p>
+</div>
+
+<div class="card">
+<h3>Custom Integrations</h3>
+<p>Integrate AI capabilities directly into existing enterprise systems.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="contact">
+
+<h2>Contact Us</h2>
+
+<form class="contact-form" action="/contact" method="POST">
+
+<input type="text" name="name" placeholder="Your Name" required>
+
+<input type="email" name="email" placeholder="Your Email" required>
+
+<textarea name="message" placeholder="Tell us about your AI project..." required></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</section>
+
+<footer>
+© 2026 Gigot AI Solutions
+</footer>
+
+<script src="network.js"></script>
+
+<script>
+
+const words = [
+"Built for Insurance",
+"Built for Automation",
+"Built for Data",
+"Built for Enterprise",
+"Built for Growth"
+];
+
+let wordIndex = 0;
+let letterIndex = 0;
+let isDeleting = false;
+
+function typeEffect(){
+
+const element = document.getElementById("typing");
+let currentWord = words[wordIndex];
+
+if(!isDeleting){
+element.textContent = currentWord.substring(0, letterIndex + 1);
+letterIndex++;
+}else{
+element.textContent = currentWord.substring(0, letterIndex - 1);
+letterIndex--;
+}
+
+if(!isDeleting && letterIndex === currentWord.length){
+isDeleting = true;
+setTimeout(typeEffect,1500);
+return;
+}
+
+if(isDeleting && letterIndex === 0){
+isDeleting = false;
+wordIndex = (wordIndex + 1) % words.length;
+}
+
+setTimeout(typeEffect, isDeleting ? 50 : 100);
+
+}
+
+typeEffect();
+
+</script>
+
+</body>
+</html>
